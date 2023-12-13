@@ -36,7 +36,7 @@ if [[ ! -d /pkgscripts-ng ]] || [ -z "$(ls -A /pkgscripts-ng)" ]; then
     clone_args=""
     # If the DSM version is 7.0, use the DSM7.0 branch of pkgscripts-ng
     if [[ "$DSM_VER" =~ ^7\.[0-9]+$ ]]; then
-        clone_args="-b DSM7.0"
+        clone_args="-b DSM${DSM_VER}"
         export PRODUCT="DSM"
     fi
     git clone ${clone_args} https://github.com/SynologyOpenSource/pkgscripts-ng
@@ -113,6 +113,9 @@ fi
 
 # Disable quit if errors to allow printing of logfiles
 set +e
+
+# bind mount /dev into build env chroot
+mount -o bind /dev $build_env/dev
 
 # Build packages
 #   -p              package arch
